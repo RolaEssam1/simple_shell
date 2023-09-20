@@ -1,74 +1,56 @@
-#include "shell.h"
+#include <stdio.h>
+#include <string.h>
 
 /**
- * interactive - returns true if shell is interactive mode
- * @info: struct address
- *
- * Return: 1 if interactive mode, 0 otherwise
+ * is_vowel - checks if a character is a vowel
+ * @c: the character to check
+ * Return: 1 if it's a vowel, 0 otherwise
  */
-int interactive(info_t *info)
+int is_vowel(char c)
 {
-	return (isatty(STDIN_FILENO) && info->readfd <= 2);
+    char vowels[] = "AEIOUaeiou";
+    return strchr(vowels, c) != NULL;
 }
 
 /**
- * is_delim - checks if character is a delimeter
- * @c: the char to check
- * @delim: the delimeter string
- * Return: 1 if true, 0 if false
+ * reverse_string - reverses a given string
+ * @str: the string to reverse
  */
-int is_delim(char c, char *delim)
+void reverse_string(char *str)
 {
-	while (*delim)
-		if (*delim++ == c)
-			return (1);
-	return (0);
+    int len = strlen(str);
+    for (int i = 0, j = len - 1; i < j; i++, j--) {
+        char temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+    }
 }
 
-/**
- * _isalpha - checks for alphabetic character
- * @c: The character to input
- * Return: 1 if c is alphabetic, 0 otherwise
- */
-
-int _isalpha(int c)
+int main()
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-		return (1);
-	else
-		return (0);
-}
+    char input[100];
+    
+    printf("Enter a string: ");
+    fgets(input, sizeof(input), stdin);
+    
+    // Remove the trailing newline character
+    if (input[strlen(input) - 1] == '\n') {
+        input[strlen(input) - 1] = '\0';
+    }
 
-/**
- * _atoi - converts a string to an integer
- * @s: the string to be converted
- * Return: 0 if no numbers in string, converted number otherwise
- */
+    printf("You entered: %s\n", input);
+    
+    printf("Reversed string: ");
+    reverse_string(input);
+    printf("%s\n", input);
 
-int _atoi(char *s)
-{
-	int i, sign = 1, flag = 0, output;
-	unsigned int result = 0;
+    printf("Vowels in the string: ");
+    for (int i = 0; i < strlen(input); i++) {
+        if (is_vowel(input[i])) {
+            printf("%c ", input[i]);
+        }
+    }
+    printf("\n");
 
-	for (i = 0; s[i] != '\0' && flag != 2; i++)
-	{
-		if (s[i] == '-')
-			sign *= -1;
-
-		if (s[i] >= '0' && s[i] <= '9')
-		{
-			flag = 1;
-			result *= 10;
-			result += (s[i] - '0');
-		}
-		else if (flag == 1)
-			flag = 2;
-	}
-
-	if (sign == -1)
-		output = -result;
-	else
-		output = result;
-
-	return (output);
+    return 0;
 }
