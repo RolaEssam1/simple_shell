@@ -1,79 +1,40 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-/* Define a structure for a node in a linked list */
-	struct Node
+/**
+ * factorial - calculates the factorial of a non-negative integer.
+ * @n: The integer for which the factorial is to be calculated.
+ *
+ * Return: The factorial of n.
+ */
+unsigned long long factorial(int n)
 {
-	int data;
-	struct Node *next;
-} Node;
-
-/* Function to insert a new node at the end of the linked list */
-void insert(Node **head, int data)
-{
-	Node *newNode = (Node *)malloc(sizeof(Node));
-
-	if (newNode == NULL)
+	if (n < 0)
 	{
-	printf("Memory allocation failed.\n");
-	return;
+	/* Factorial is not defined for negative numbers. */
+	return (0);
 	}
-
-	newNode->data = data;
-	newNode->next = NULL;
-
-	if (*head == NULL)
+	else if (n == 0 || n == 1)
 	{
-	*head = newNode;
-	return;
+	/* The factorial of 0 and 1 is 1.*/
+	return (1);
 	}
-
-	Node *temp = *head;
-
-	while (temp->next != NULL)
+	else
 	{
-	temp = temp->next;
+	/* Recursive calculation for positive integers.*/
+	return (n * factorial(n - 1));
 	}
-
-	temp->next = newNode;
-}
-
-/* Function to display the linked list */
-void display(Node *head)
-{
-	Node *current = head;
-
-	while (current != NULL)
-	{
-	printf("%d -> ", current->data);
-	current = current->next;
-	}
-
-	printf("NULL\n");
 }
 
 int main(void)
 {
-	Node *head = NULL;
+	int n;
 
-    /* Insert nodes into the linked list */
-	insert(&head, 10);
-	insert(&head, 20);
-	insert(&head, 30);
+	printf("Enter a non-negative integer: ");
+	scanf("%d", &n);
 
-    /* Display the linked list */
-	printf("Linked List: ");
-	display(head);
+	unsigned long long result = factorial(n);
 
-    /* Free the dynamically allocated memory for the linked list nodes */
-	Node *temp;
-
-	while (head != NULL)
-	{
-	temp = head;
-	head = head->next;
-	free(temp);
-	}
+	printf("Factorial of %d is %llu\n", n, result);
 
 	return (0);
 }
